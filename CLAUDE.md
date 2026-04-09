@@ -14,7 +14,7 @@ answers) → projector displays visual help aligned to the physical page.
 - **Kodak Luma 150 projector** — HDMI-CEC via `cec-client`
 - **VL53L7CX ToF sensor** — 8x8 zone ranging, 60°x60° FOV, finger detection
 - **ReSpeaker Lite** — USB 2-mic array, XMOS XU316, wake word + voice commands
-- **Mac mini M4 16GB** — remote LLM brain (Qwen 3 8B via Ollama)
+- **Mac mini M4 16GB** — remote LLM brain (Qwen 3 4B via Ollama)
 - **Anthropic API** (Sonnet/Opus) — complex fallback
 
 ## Subject Scope

@@ -29,7 +29,7 @@ pytest
 - Kodak Luma 150 projector (HDMI-CEC)
 - VL53L7CX ToF sensor (finger detection)
 - ReSpeaker Lite USB mic array (voice commands)
-- Mac mini M4 as remote LLM brain (Ollama)
+- Mac mini M4 as remote LLM brain (Qwen 3 4B via Ollama)
 
 All sensors are fixed-mounted inside the enclosure with pre-angled cutouts — no moving parts.
 
