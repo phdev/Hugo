@@ -104,8 +104,8 @@ def test_empty():
 def test_import_voice_mic():
     from hugo.voice import mic
     assert hasattr(mic, "AudioChunk")
-    assert hasattr(mic, "find_device_index")
-    assert hasattr(mic, "open_stream")
+    assert hasattr(mic, "audio_stream")
+    assert hasattr(mic, "is_audio_available")
 
 
 def test_import_voice_vad():

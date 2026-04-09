@@ -1,35 +1,26 @@
-"""VL53L7CX Time-of-Flight multizone ranging sensor.
+"""VL53L7CX ToF sensor via XIAO ESP32-S3 over WiFi.
 
-8x8 grid of distance measurements over a 60°x60° FOV. Mounted
-beside the projector looking down at the worksheet. Detects when
-a finger rises from the table surface into the projection area,
-independent of ambient light or projector output.
+The XIAO #2 reads the VL53L7CX over I2C and exposes an HTTP
+JSON endpoint at :8080/depth. The Mac mini polls this at ~15Hz.
 
-Hardware: VL53L7CX on I2C (SDA/SCL), optional LPn GPIO for
-power control. Default I2C address 0x29.
-
-The sensor returns a ZoneGrid — an 8x8 matrix of distances in mm.
-Each cell covers roughly a 7.5°x7.5° slice of the FOV. When
-mounted ~40cm above an 8.5x11" worksheet, each zone is about
-5x5 cm — enough to tell which problem region a finger is in.
+8x8 grid of distance measurements over a 90° diagonal FOV.
+Mounted inside the enclosure looking down at the worksheet.
+Detects when a finger touches the projected help buttons.
 """
 
-from dataclasses import dataclass, field
+import logging
+from dataclasses import dataclass
 
+import httpx
 import numpy as np
 
+logger = logging.getLogger(__name__)
 
 # ── Configuration ──
 
-I2C_BUS: int = 1
-I2C_ADDRESS: int = 0x29
-# GPIO pin for LPn (low-power enable / reset), -1 = not connected
-LPN_GPIO: int = -1
-
-# Resolution: 16 (4x4) or 64 (8x8)
-RESOLUTION: int = 64
-# Ranging frequency in Hz (1–60, higher = more CPU)
-RANGING_FREQ_HZ: int = 15
+XIAO_TOF_HOST: str = "hugo-tof.local"
+XIAO_TOF_PORT: int = 8080
+POLL_TIMEOUT: float = 0.5  # fast timeout for 15Hz polling
 
 
 # ── Data types ──
@@ -39,9 +30,8 @@ class ZoneGrid:
     """One frame of ranging data from the VL53L7CX.
 
     Attributes:
-        distances: 8x8 (or 4x4) grid of distances in mm. 0 = no target.
-        statuses: Per-zone validity (0–255, 5 = valid, 9 = valid with
-                  sigma clipping). Use is_valid() to check.
+        distances: 8x8 grid of distances in mm. 0 = no target.
+        statuses: Per-zone validity. 5 = valid, 9 = valid with clipping.
         resolution: 4 or 8 (side length of the grid).
         timestamp_ms: Sensor-reported timestamp in milliseconds.
     """
@@ -52,90 +42,111 @@ class ZoneGrid:
     timestamp_ms: int = 0
 
     def is_valid(self, row: int, col: int) -> bool:
-        """Check if a zone measurement is valid."""
         return int(self.statuses[row, col]) in (5, 6, 9, 10)
 
     def valid_distances(self) -> np.ndarray:
-        """Return distances with invalid zones masked as 0."""
         valid_mask = np.isin(self.statuses, [5, 6, 9, 10])
         return np.where(valid_mask, self.distances, 0)
 
 
 @dataclass
 class TouchZone:
-    """A zone where a finger is detected close to the table surface.
-
-    The sensor reads a baseline distance to the table/worksheet.
-    When a finger is present, the distance in that zone drops
-    significantly. This struct reports where and how close.
-    """
+    """A zone where a finger is detected close to the table."""
 
     row: int
     col: int
     distance_mm: int
-    delta_mm: int  # how much closer than the baseline
+    delta_mm: int  # how much closer than baseline
 
 
-# ── Sensor lifecycle ──
+# ── HTTP interface ──
 
-def init(
-    i2c_bus: int = I2C_BUS,
-    i2c_address: int = I2C_ADDRESS,
-    resolution: int = RESOLUTION,
-    ranging_freq_hz: int = RANGING_FREQ_HZ,
-    lpn_gpio: int = LPN_GPIO,
-) -> None:
-    """Initialize the VL53L7CX sensor.
+def read_grid(
+    host: str = XIAO_TOF_HOST,
+    port: int = XIAO_TOF_PORT,
+) -> ZoneGrid:
+    """Read one frame of ranging data from the XIAO over HTTP.
 
-    Configures I2C, sets resolution (4x4 or 8x8), ranging
-    frequency, and starts continuous ranging. Call once at startup.
+    The XIAO serves JSON: {"zones": [[d00..d07], ...], "fps": 15.2}
 
-    Args:
-        i2c_bus: I2C bus number (1 on most Pi models).
-        i2c_address: 7-bit I2C address (default 0x29).
-        resolution: 16 for 4x4 or 64 for 8x8.
-        ranging_freq_hz: Measurements per second (1–60).
-        lpn_gpio: BCM GPIO for LPn pin, -1 if not connected.
+    Returns:
+        ZoneGrid with distances and all-valid statuses.
     """
-    raise NotImplementedError
+    url = f"http://{host}:{port}/depth"
+    try:
+        response = httpx.get(url, timeout=POLL_TIMEOUT)
+        response.raise_for_status()
+        data = response.json()
+
+        zones = data["zones"]
+        res = len(zones)
+        distances = np.array(zones, dtype=np.int16)
+        # XIAO firmware doesn't report per-zone status, assume all valid
+        statuses = np.full((res, res), 5, dtype=np.uint8)
+
+        return ZoneGrid(
+            distances=distances,
+            statuses=statuses,
+            resolution=res,
+        )
+    except httpx.ConnectError:
+        raise ConnectionError(
+            f"Cannot reach XIAO ToF at {url}. "
+            "Check WiFi and that the XIAO is powered on."
+        )
+    except (httpx.TimeoutException, Exception) as e:
+        logger.warning(f"ToF read failed: {e}")
+        # Return empty grid
+        return ZoneGrid(
+            distances=np.zeros((8, 8), dtype=np.int16),
+            statuses=np.zeros((8, 8), dtype=np.uint8),
+        )
 
 
-def shutdown() -> None:
-    """Stop ranging and put the sensor into low-power mode."""
-    raise NotImplementedError
+def is_available(
+    host: str = XIAO_TOF_HOST,
+    port: int = XIAO_TOF_PORT,
+) -> bool:
+    """Check if the XIAO ToF sensor is reachable."""
+    try:
+        r = httpx.get(f"http://{host}:{port}/status", timeout=2.0)
+        return r.status_code == 200
+    except Exception:
+        return False
 
 
-def is_ready() -> bool:
-    """Check if a new ranging frame is available."""
-    raise NotImplementedError
+# ── Finger detection (runs on Mac mini, pure computation) ──
 
-
-# ── Reading data ──
-
-def read_grid() -> ZoneGrid:
-    """Read one frame of ranging data.
-
-    Blocks until data is available (or times out). Returns the
-    full zone grid with distances and validity statuses.
-    """
-    raise NotImplementedError
-
-
-# ── Finger detection ──
-
-def calibrate_baseline(num_frames: int = 10) -> np.ndarray:
+def calibrate_baseline(
+    num_frames: int = 10,
+    host: str = XIAO_TOF_HOST,
+    port: int = XIAO_TOF_PORT,
+) -> np.ndarray:
     """Capture baseline distances to the table surface.
 
-    Takes multiple frames with no hand present and averages them
-    to establish the "empty table" distance for each zone.
+    Takes multiple frames with no hand present and averages them.
 
     Args:
         num_frames: Number of frames to average.
+        host: XIAO ToF hostname.
+        port: XIAO ToF port.
 
     Returns:
-        8x8 (or 4x4) array of baseline distances in mm.
+        8x8 array of baseline distances in mm.
     """
-    raise NotImplementedError
+    import time
+    frames = []
+    for _ in range(num_frames):
+        grid = read_grid(host, port)
+        valid = grid.valid_distances()
+        if valid.any():
+            frames.append(valid.astype(np.float32))
+        time.sleep(1.0 / 15)  # match 15Hz polling rate
+
+    if not frames:
+        return np.zeros((8, 8), dtype=np.int16)
+
+    return np.mean(frames, axis=0).astype(np.int16)
 
 
 def detect_touch_zones(
@@ -143,21 +154,7 @@ def detect_touch_zones(
     baseline: np.ndarray,
     threshold_mm: int = 40,
 ) -> list[TouchZone]:
-    """Find zones where a finger is near the table surface.
-
-    Compares current distances against the baseline. Zones where
-    the distance is significantly shorter (a finger is closer to
-    the sensor than the table) are returned as touch zones.
-
-    Args:
-        grid: Current ranging frame.
-        baseline: Baseline from calibrate_baseline().
-        threshold_mm: Minimum delta to consider a touch (default
-                      40mm — a finger is ~10-15mm thick, plus margin).
-
-    Returns:
-        List of TouchZone objects for zones with detected fingers.
-    """
+    """Find zones where a finger is near the table surface."""
     touches = []
     valid = grid.valid_distances()
     res = grid.resolution
@@ -169,8 +166,7 @@ def detect_touch_zones(
             delta = int(baseline[r, c]) - int(valid[r, c])
             if delta >= threshold_mm:
                 touches.append(TouchZone(
-                    row=r,
-                    col=c,
+                    row=r, col=c,
                     distance_mm=int(valid[r, c]),
                     delta_mm=delta,
                 ))
@@ -184,21 +180,7 @@ def zone_to_worksheet_xy(
     worksheet_width: int = 640,
     worksheet_height: int = 828,
 ) -> tuple[int, int]:
-    """Map a sensor zone (row, col) to worksheet pixel coordinates.
-
-    Assumes the sensor FOV is aligned to cover the full worksheet.
-    Returns the center point of the zone in worksheet space.
-
-    Args:
-        row: Zone row (0 = top).
-        col: Zone column (0 = left).
-        resolution: Grid side length (4 or 8).
-        worksheet_width: Worksheet width in pixels.
-        worksheet_height: Worksheet height in pixels.
-
-    Returns:
-        (x, y) in worksheet pixel coordinates.
-    """
+    """Map a sensor zone (row, col) to worksheet pixel coordinates."""
     zone_w = worksheet_width / resolution
     zone_h = worksheet_height / resolution
     x = int(col * zone_w + zone_w / 2)

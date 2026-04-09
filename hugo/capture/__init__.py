@@ -1,5 +1,6 @@
-"""Capture module — Pi Camera 3 (wide, 120° FOV) interface.
+"""Capture module — XIAO ESP32-S3 camera over WiFi.
 
-In dev mode, loads worksheet images from file instead of capturing
-from hardware. On the Pi 5, uses picamera2 to grab frames.
+Connects to the XIAO ESP32-S3 Sense with OV5640 120° camera
+via HTTP. The XIAO streams MJPEG on port 8080. In dev mode,
+loads worksheet images from file instead.
 """

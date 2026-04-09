@@ -16,9 +16,6 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-pi = [
-    "picamera2>=0.3",
-]
 dev = [
     "pytest>=8.0",
     "pytest-cov>=5.0",

@@ -1,12 +1,11 @@
-"""Voice module — ReSpeaker Lite USB mic array integration.
+"""Voice module — XIAO ESP32-S3 onboard mic over WiFi.
 
-Handles voice input from the ReSpeaker Lite (2-mic array, XMOS
-XU316 with onboard noise suppression and echo cancellation).
-Connected via USB to the Pi 5.
+Audio streams from the XIAO #1's onboard PDM MEMS microphone
+via HTTP to the Mac mini. The Mac mini runs wake word detection,
+VAD, and speech-to-text (whisper.cpp) locally.
 
 Features:
-- Wake word detection ("Hey Hugo") for hands-free activation
+- Wake word detection ("Hey Hugo") via whisper.cpp on Mac mini
 - Voice commands ("help me with number three")
-- Voice activity detection (VAD) to know when the kid is speaking
-- LED feedback via WS2812 on the ReSpeaker board
+- Voice activity detection (VAD) via webrtcvad
 """

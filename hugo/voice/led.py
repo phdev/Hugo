@@ -1,15 +1,18 @@
-"""ReSpeaker Lite LED control.
+"""LED feedback via XIAO ESP32-S3 onboard LED over WiFi.
 
-The ReSpeaker Lite has a WS2812 RGB LED. We use it to give
-visual feedback for voice interaction state:
-- Off: idle, not listening
-- Pulsing cyan: listening for wake word
-- Solid green: wake word detected, listening for command
-- Yellow flash: processing command
-- Red flash: didn't understand
+The XIAO #1 has a WS2812 addressable LED. We control it via
+HTTP POST to give visual feedback for voice state.
 """
 
+import logging
 from enum import Enum
+
+import httpx
+
+logger = logging.getLogger(__name__)
+
+XIAO_CAM_HOST: str = "hugo-cam.local"
+XIAO_CAM_PORT: int = 8080
 
 
 class LEDState(Enum):
@@ -23,10 +26,18 @@ class LEDState(Enum):
     SUCCESS = "success"             # green flash
 
 
-def set_led(state: LEDState) -> None:
-    """Set the ReSpeaker LED to reflect the current voice state.
+def set_led(
+    state: LEDState,
+    host: str = XIAO_CAM_HOST,
+    port: int = XIAO_CAM_PORT,
+) -> None:
+    """Set the XIAO LED to reflect the current voice state.
 
-    Uses the ReSpeaker's USB HID interface to control the
-    onboard WS2812 LED.
+    Sends an HTTP POST to the XIAO's LED control endpoint.
+    Fails silently if the XIAO is unreachable.
     """
-    raise NotImplementedError
+    url = f"http://{host}:{port}/led"
+    try:
+        httpx.post(url, json={"state": state.value}, timeout=1.0)
+    except Exception as e:
+        logger.debug(f"LED control failed: {e}")

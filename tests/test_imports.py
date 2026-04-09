@@ -4,6 +4,7 @@
 def test_import_capture():
     from hugo.capture import camera
     assert hasattr(camera, "capture_frame")
+    assert hasattr(camera, "capture_stream")
 
 
 def test_import_vision():
@@ -47,12 +48,6 @@ def test_import_projection():
     assert hasattr(renderer, "show_frame")
 
 
-def test_import_hardware_projector():
-    from hugo.hardware import projector
-    assert hasattr(projector, "power_on")
-    assert hasattr(projector, "power_off")
-
-
 def test_import_orchestrator():
     from hugo.orchestrator import pipeline
     assert hasattr(pipeline, "run_once")
@@ -89,11 +84,11 @@ def test_import_hardware_tof():
     from hugo.hardware import tof_sensor
     assert hasattr(tof_sensor, "ZoneGrid")
     assert hasattr(tof_sensor, "TouchZone")
-    assert hasattr(tof_sensor, "init")
     assert hasattr(tof_sensor, "read_grid")
     assert hasattr(tof_sensor, "detect_touch_zones")
     assert hasattr(tof_sensor, "zone_to_worksheet_xy")
     assert hasattr(tof_sensor, "calibrate_baseline")
+    assert hasattr(tof_sensor, "is_available")
 
 
 def test_tof_zone_grid():

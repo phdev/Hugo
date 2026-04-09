@@ -421,10 +421,15 @@ def render_overlay(
     return result
 
 
-def show_frame(frame: Image.Image) -> None:
+def show_frame(frame: Image.Image, output_path: str = "/tmp/hugo_frame.png") -> None:
     """Display a rendered frame.
 
-    In dev mode, saves to a file (headless-safe). On the Pi,
-    would push to the HDMI-connected projector.
+    In dev mode, saves to a file. In production, the Mac mini
+    displays the frame on its AirPlay-mirrored display which
+    the Kodak Luma 350 receives wirelessly.
+
+    For AirPlay: use macOS screen mirroring (System Settings →
+    Displays → mirror to Luma 350). This function just needs to
+    update the full-screen window on that mirrored display.
     """
-    frame.save("/tmp/hugo_frame.png")
+    frame.save(output_path)

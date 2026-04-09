@@ -1,24 +1,26 @@
-"""ReSpeaker Lite microphone interface.
+"""Microphone interface — XIAO ESP32-S3 onboard MEMS mic over WiFi.
 
-Handles audio capture from the ReSpeaker Lite USB device.
-The XMOS XU316 chip provides hardware noise suppression and
-echo cancellation — important since the kid is sitting right
-next to the device and ambient room noise is typical.
+The XIAO #1 streams raw PCM audio on :8081/audio (16kHz mono
+16-bit). The Mac mini consumes this stream for wake word
+detection and voice commands.
 """
 
+import io
+import logging
 from dataclasses import dataclass
 
+import httpx
 import numpy as np
 
+logger = logging.getLogger(__name__)
 
 # ── Configuration ──
 
-# ReSpeaker Lite appears as a USB audio device.
-# Find the right device index with: python -m pyaudio
-DEVICE_NAME: str = "ReSpeaker"
-SAMPLE_RATE: int = 16000   # 16kHz is standard for speech
-CHANNELS: int = 1          # mono (mixed from 2-mic array)
-CHUNK_SIZE: int = 1024     # frames per read
+XIAO_CAM_HOST: str = "hugo-cam.local"  # same XIAO as camera
+AUDIO_PORT: int = 8081
+SAMPLE_RATE: int = 16000   # 16kHz
+CHANNELS: int = 1          # mono
+CHUNK_SIZE: int = 1024     # frames per chunk (~64ms at 16kHz)
 
 
 @dataclass
@@ -39,30 +41,43 @@ class AudioChunk:
         return float(np.sqrt(np.mean(self.samples.astype(np.float32) ** 2)))
 
 
-def find_device_index(name: str = DEVICE_NAME) -> int | None:
-    """Find the PyAudio device index for the ReSpeaker.
-
-    Scans available audio input devices for one matching the name.
-    Returns None if not found (e.g., running on a laptop without
-    the hardware).
-    """
-    raise NotImplementedError
-
-
-def open_stream(
-    device_index: int | None = None,
-    sample_rate: int = SAMPLE_RATE,
-    channels: int = CHANNELS,
+def audio_stream(
+    host: str = XIAO_CAM_HOST,
+    port: int = AUDIO_PORT,
     chunk_size: int = CHUNK_SIZE,
 ):
-    """Open a PyAudio input stream from the ReSpeaker.
+    """Stream audio chunks from the XIAO over HTTP.
 
-    Returns a context manager that yields AudioChunk objects.
-    If device_index is None, attempts to auto-detect the ReSpeaker.
+    The XIAO serves raw 16-bit PCM at 16kHz mono on :8081/audio.
+
+    Yields:
+        AudioChunk objects.
     """
-    raise NotImplementedError
+    url = f"http://{host}:{port}/audio"
+    bytes_per_chunk = chunk_size * 2  # 16-bit = 2 bytes per sample
+
+    with httpx.stream("GET", url, timeout=None) as response:
+        buffer = b""
+        for data in response.iter_bytes():
+            buffer += data
+            while len(buffer) >= bytes_per_chunk:
+                raw = buffer[:bytes_per_chunk]
+                buffer = buffer[bytes_per_chunk:]
+                samples = np.frombuffer(raw, dtype=np.int16)
+                yield AudioChunk(
+                    samples=samples,
+                    sample_rate=SAMPLE_RATE,
+                    channels=CHANNELS,
+                )
 
 
-def read_chunk(stream) -> AudioChunk:
-    """Read one chunk of audio from an open stream."""
-    raise NotImplementedError
+def is_audio_available(
+    host: str = XIAO_CAM_HOST,
+    port: int = AUDIO_PORT,
+) -> bool:
+    """Check if the XIAO audio stream is reachable."""
+    try:
+        r = httpx.get(f"http://{host}:{port}/status", timeout=2.0)
+        return r.status_code == 200
+    except Exception:
+        return False
