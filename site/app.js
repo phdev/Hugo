@@ -4,28 +4,27 @@ document.querySelectorAll('.tab').forEach(tab => {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
 
-    const target = tab.dataset.tab;
     document.querySelectorAll('.worksheet').forEach(ws => ws.classList.add('hidden'));
-    document.getElementById('ws-' + target).classList.remove('hidden');
+    document.getElementById('ws-' + tab.dataset.tab).classList.remove('hidden');
 
-    // Close all open hints when switching tabs
-    document.querySelectorAll('.hint-zone').forEach(hz => hz.classList.remove('visible'));
+    // Close all hints when switching tabs
+    document.querySelectorAll('.problem').forEach(p => p.classList.remove('hinting'));
   });
 });
 
-// ── Problem click → toggle hint ──
+// ── Click a problem → toggle its overlay hint ──
 document.querySelectorAll('.problem').forEach(problem => {
   problem.addEventListener('click', () => {
-    const hintId = 'hint-' + problem.dataset.hint;
-    const hintZone = document.getElementById(hintId);
-    if (!hintZone) return;
+    const wasHinting = problem.classList.contains('hinting');
 
-    // Close other hints in the same worksheet
-    const worksheet = problem.closest('.worksheet-paper');
-    worksheet.querySelectorAll('.hint-zone.visible').forEach(hz => {
-      if (hz.id !== hintId) hz.classList.remove('visible');
-    });
+    // Close other hints on the same worksheet
+    problem.closest('.worksheet-paper')
+      .querySelectorAll('.problem.hinting')
+      .forEach(p => p.classList.remove('hinting'));
 
-    hintZone.classList.toggle('visible');
+    // Toggle this one
+    if (!wasHinting) {
+      problem.classList.add('hinting');
+    }
   });
 });
