@@ -13,6 +13,7 @@ answers) → projector displays visual help aligned to the physical page.
 - **Pi Camera 3 (wide)** — 120° FOV, captures worksheets
 - **Kodak Luma 150 projector** — HDMI-CEC via `cec-client`
 - **VL53L7CX ToF sensor** — 8x8 zone ranging, 60°x60° FOV, finger detection
+- **ReSpeaker Lite** — USB 2-mic array, XMOS XU316, wake word + voice commands
 - **Mac mini M4 16GB** — remote LLM brain (Qwen 3 8B via Ollama)
 - **Anthropic API** (Sonnet/Opus) — complex fallback
 
@@ -32,6 +33,7 @@ answers) → projector displays visual help aligned to the physical page.
 - `helpers/` — Subject-specific agents (math, phonics, shapes)
 - `projection/` — Render help frames, calibration, page alignment. Pygame or Cairo → HDMI out, stubbed to desktop window for dev
 - `interaction/` — Finger detection (background subtraction), projected help buttons in the margin, dwell timer for press-and-hold triggering
+- `voice/` — ReSpeaker Lite mic input, wake word ("Hey Hugo"), voice commands, VAD, LED feedback
 - `hardware/` — `cec-client` projector control, VL53L7CX ToF sensor via I2C
 - `orchestrator/` — Main loop tying the pipeline together
 

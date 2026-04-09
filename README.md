@@ -28,6 +28,7 @@ pytest
 - Pi Camera 3 (wide, 120° FOV)
 - Kodak Luma 150 projector (HDMI-CEC)
 - VL53L7CX ToF sensor (finger detection)
+- ReSpeaker Lite USB mic array (voice commands)
 - Mac mini M4 as remote LLM brain (Ollama)
 
 All sensors are fixed-mounted inside the enclosure with pre-angled cutouts — no moving parts.
@@ -43,6 +44,7 @@ hugo/
 ├── classifier/     # Problem type detection
 ├── helpers/        # Subject-specific hint generators
 ├── projection/     # Render and project help frames
+├── voice/          # Wake word, voice commands, VAD, LED
 ├── hardware/       # Projector control, ToF sensor
 └── orchestrator/   # Main pipeline loop
 ```
