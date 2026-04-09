@@ -12,7 +12,7 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// ── Click a problem → toggle its overlay hint ──
+// ── Click a problem → slide open hint below it ──
 document.querySelectorAll('.problem').forEach(problem => {
   problem.addEventListener('click', () => {
     const wasHinting = problem.classList.contains('hinting');
@@ -22,7 +22,6 @@ document.querySelectorAll('.problem').forEach(problem => {
       .querySelectorAll('.problem.hinting')
       .forEach(p => p.classList.remove('hinting'));
 
-    // Toggle this one
     if (!wasHinting) {
       problem.classList.add('hinting');
     }
