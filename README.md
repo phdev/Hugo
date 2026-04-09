@@ -27,8 +27,10 @@ pytest
 - Raspberry Pi 5
 - Pi Camera Module
 - Kodak Luma 150 projector (HDMI-CEC)
-- Actuonix L12-50 + 2x MG90S servos (lift/pan/tilt)
+- VL53L7CX ToF sensor (finger detection)
 - Mac mini M4 as remote LLM brain (Ollama)
+
+All sensors are fixed-mounted inside the enclosure with pre-angled cutouts — no moving parts.
 
 ## Project Structure
 
@@ -41,6 +43,6 @@ hugo/
 ├── classifier/     # Problem type detection
 ├── helpers/        # Subject-specific hint generators
 ├── projection/     # Render and project help frames
-├── hardware/       # Projector and servo control
+├── hardware/       # Projector control, ToF sensor
 └── orchestrator/   # Main pipeline loop
 ```

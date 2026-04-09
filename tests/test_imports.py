@@ -53,14 +53,6 @@ def test_import_hardware_projector():
     assert hasattr(projector, "power_off")
 
 
-def test_import_hardware_servos():
-    from hugo.hardware import servos
-    assert hasattr(servos, "set_lift")
-    assert hasattr(servos, "set_pan")
-    assert hasattr(servos, "set_tilt")
-    assert hasattr(servos, "home")
-
-
 def test_import_orchestrator():
     from hugo.orchestrator import pipeline
     assert hasattr(pipeline, "run_once")

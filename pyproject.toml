@@ -18,8 +18,6 @@ dependencies = [
 [project.optional-dependencies]
 pi = [
     "picamera2>=0.3",
-    "gpiozero>=2.0",
-    "pigpio>=1.78",
 ]
 dev = [
     "pytest>=8.0",

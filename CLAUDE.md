@@ -13,7 +13,6 @@ answers) → projector displays visual help aligned to the physical page.
 - **Pi Camera Module** — captures worksheets
 - **Kodak Luma 150 projector** — HDMI-CEC via `cec-client`
 - **VL53L7CX ToF sensor** — 8x8 zone ranging, 60°x60° FOV, finger detection
-- **Actuonix L12-50 linear servo + 2x MG90S servos** — lift/pan/tilt
 - **Mac mini M4 16GB** — remote LLM brain (Qwen 3 8B via Ollama)
 - **Anthropic API** (Sonnet/Opus) — complex fallback
 
@@ -33,7 +32,7 @@ answers) → projector displays visual help aligned to the physical page.
 - `helpers/` — Subject-specific agents (math, phonics, shapes)
 - `projection/` — Render help frames, calibration, page alignment. Pygame or Cairo → HDMI out, stubbed to desktop window for dev
 - `interaction/` — Finger detection (background subtraction), projected help buttons in the margin, dwell timer for press-and-hold triggering
-- `hardware/` — `cec-client` projector control, servo control via gpiozero/pigpio
+- `hardware/` — `cec-client` projector control, VL53L7CX ToF sensor via I2C
 - `orchestrator/` — Main loop tying the pipeline together
 
 ## Key Rules
