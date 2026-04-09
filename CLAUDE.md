@@ -31,6 +31,7 @@ answers) → projector displays visual help aligned to the physical page.
 - `classifier/` — Problem type detection, routes to correct helper
 - `helpers/` — Subject-specific agents (math, phonics, shapes)
 - `projection/` — Render help frames, calibration, page alignment. Pygame or Cairo → HDMI out, stubbed to desktop window for dev
+- `interaction/` — Finger detection (background subtraction), projected help buttons in the margin, dwell timer for press-and-hold triggering
 - `hardware/` — `cec-client` projector control, servo control via gpiozero/pigpio
 - `orchestrator/` — Main loop tying the pipeline together
 
