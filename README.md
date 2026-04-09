@@ -25,7 +25,7 @@ pytest
 ## Hardware
 
 - Raspberry Pi 5
-- Pi Camera Module
+- Pi Camera 3 (wide, 120° FOV)
 - Kodak Luma 150 projector (HDMI-CEC)
 - VL53L7CX ToF sensor (finger detection)
 - Mac mini M4 as remote LLM brain (Ollama)

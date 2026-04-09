@@ -10,7 +10,7 @@ answers) → projector displays visual help aligned to the physical page.
 ## Hardware
 
 - **Raspberry Pi 5** — compute
-- **Pi Camera Module** — captures worksheets
+- **Pi Camera 3 (wide)** — 120° FOV, captures worksheets
 - **Kodak Luma 150 projector** — HDMI-CEC via `cec-client`
 - **VL53L7CX ToF sensor** — 8x8 zone ranging, 60°x60° FOV, finger detection
 - **Mac mini M4 16GB** — remote LLM brain (Qwen 3 8B via Ollama)

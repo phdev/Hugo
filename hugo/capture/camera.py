@@ -1,7 +1,7 @@
 """Camera interface for capturing worksheet images.
 
-In dev mode, loads images from disk. On the Pi, captures from
-the Pi Camera Module via picamera2.
+In dev mode, loads images from disk. On the Pi 5, captures from
+the Pi Camera 3 (wide, 120° FOV) via picamera2.
 """
 
 from pathlib import Path
