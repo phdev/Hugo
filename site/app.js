@@ -7,23 +7,23 @@ document.querySelectorAll('.tab').forEach(tab => {
     document.querySelectorAll('.worksheet').forEach(ws => ws.classList.add('hidden'));
     document.getElementById('ws-' + tab.dataset.tab).classList.remove('hidden');
 
-    // Close all hints when switching tabs
-    document.querySelectorAll('.problem').forEach(p => p.classList.remove('hinting'));
+    // Turn off all projected hints
+    document.querySelectorAll('.row').forEach(r => r.classList.remove('active'));
   });
 });
 
-// ── Click a problem → slide open hint below it ──
-document.querySelectorAll('.problem').forEach(problem => {
-  problem.addEventListener('click', () => {
-    const wasHinting = problem.classList.contains('hinting');
+// ── Tap a problem row → toggle projected hint in its white space ──
+document.querySelectorAll('.row').forEach(row => {
+  row.addEventListener('click', () => {
+    const wasActive = row.classList.contains('active');
 
-    // Close other hints on the same worksheet
-    problem.closest('.worksheet-paper')
-      .querySelectorAll('.problem.hinting')
-      .forEach(p => p.classList.remove('hinting'));
+    // Turn off other hints on this page
+    row.closest('.page')
+      .querySelectorAll('.row.active')
+      .forEach(r => r.classList.remove('active'));
 
-    if (!wasHinting) {
-      problem.classList.add('hinting');
+    if (!wasActive) {
+      row.classList.add('active');
     }
   });
 });

@@ -10,8 +10,8 @@
 
 <header>
   <h1>Hugo</h1>
-  <p class="subtitle">Homework Helping Projector Box — Projection UI Demo</p>
-  <p class="desc">Simulates what Hugo projects onto a worksheet via a Kodak Luma pico projector. Tap any problem to see the hint. Bright colors only — the projector adds light, it can't darken.</p>
+  <p class="subtitle">Projection UI Demo</p>
+  <p class="desc">This simulates a physical worksheet on a table with projected hints. The printed content is fixed — Hugo projects colored light into the white space around problems. Tap a problem to toggle its hint.</p>
 </header>
 
 <main>
@@ -23,86 +23,85 @@
 
   <!-- ============ MATH ============ -->
   <section class="worksheet" id="ws-math">
-    <div class="worksheet-paper">
-      <h2 class="ws-title">Addition Practice</h2>
+    <div class="page">
+      <div class="page-title">Addition Practice</div>
+      <div class="page-subtitle">Name: ____________&nbsp;&nbsp;&nbsp;Date: ________</div>
 
-      <div class="problem" data-hint="math-add-1">
-        <div class="problem-content">
-          <span class="problem-num">1.</span>
-          <span class="problem-text">3 + 2 = <span class="blank">___</span></span>
-        </div>
-        <div class="hint-area">
-          <div class="hint-dots">
-            <div class="dot-group left">
-              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-            </div>
-            <span class="hint-plus">+</span>
-            <div class="dot-group right">
-              <span class="dot r"></span><span class="dot r"></span>
-            </div>
+      <div class="row" data-problem="1">
+        <div class="printed">1.&ensp;3 + 2 = ______</div>
+        <div class="whitespace hint-1-math">
+          <div class="proj dot-row">
+            <span class="dot orange"></span><span class="dot orange"></span><span class="dot orange"></span>
+            <span class="plus">+</span>
+            <span class="dot cyan"></span><span class="dot cyan"></span>
           </div>
-          <div class="hint-label">Count all the dots!</div>
+          <div class="proj label">count them all!</div>
         </div>
       </div>
 
-      <div class="problem" data-hint="math-add-2">
-        <div class="problem-content">
-          <span class="problem-num">2.</span>
-          <span class="problem-text">7 + 5 = <span class="blank">___</span></span>
-        </div>
-        <div class="hint-area">
-          <div class="number-line">
-            <div class="nl-track">
-              <span class="nl-mark">0</span>
-              <span class="nl-mark">1</span>
-              <span class="nl-mark">2</span>
-              <span class="nl-mark">3</span>
-              <span class="nl-mark">4</span>
-              <span class="nl-mark">5</span>
-              <span class="nl-mark">6</span>
-              <span class="nl-mark start-num">7</span>
-              <span class="nl-mark hop-mark">8</span>
-              <span class="nl-mark hop-mark">9</span>
-              <span class="nl-mark hop-mark">10</span>
-              <span class="nl-mark hop-mark">11</span>
-              <span class="nl-mark hop-mark">12</span>
-            </div>
+      <div class="row" data-problem="2">
+        <div class="printed">2.&ensp;7 + 5 = ______</div>
+        <div class="whitespace hint-2-math">
+          <div class="proj numberline">
+            <svg viewBox="0 0 400 50">
+              <line x1="10" y1="30" x2="390" y2="30" stroke="#ddd" stroke-width="2"/>
+              <!-- ticks and numbers 0-12 -->
+              <g class="nl-ticks" fill="#ccc" font-size="11" text-anchor="middle" font-weight="600">
+                <line x1="10" y1="25" x2="10" y2="35" stroke="#ccc" stroke-width="1.5"/><text x="10" y="47">0</text>
+                <line x1="39" y1="25" x2="39" y2="35" stroke="#ccc" stroke-width="1.5"/><text x="39" y="47">1</text>
+                <line x1="69" y1="25" x2="69" y2="35" stroke="#ccc" stroke-width="1.5"/><text x="69" y="47">2</text>
+                <line x1="98" y1="25" x2="98" y2="35" stroke="#ccc" stroke-width="1.5"/><text x="98" y="47">3</text>
+                <line x1="127" y1="25" x2="127" y2="35" stroke="#ccc" stroke-width="1.5"/><text x="127" y="47">4</text>
+                <line x1="156" y1="25" x2="156" y2="35" stroke="#ccc" stroke-width="1.5"/><text x="156" y="47">5</text>
+                <line x1="186" y1="25" x2="186" y2="35" stroke="#ccc" stroke-width="1.5"/><text x="186" y="47">6</text>
+                <line x1="215" y1="25" x2="215" y2="35" stroke="#ccc" stroke-width="1.5"/>
+                <line x1="244" y1="25" x2="244" y2="35" stroke="#ccc" stroke-width="1.5"/>
+                <line x1="273" y1="25" x2="273" y2="35" stroke="#ccc" stroke-width="1.5"/>
+                <line x1="303" y1="25" x2="303" y2="35" stroke="#ccc" stroke-width="1.5"/>
+                <line x1="332" y1="25" x2="332" y2="35" stroke="#ccc" stroke-width="1.5"/>
+                <line x1="361" y1="25" x2="361" y2="35" stroke="#ccc" stroke-width="1.5"/>
+              </g>
+              <!-- projected: start marker + hops -->
+              <g class="proj-svg">
+                <text x="215" y="47" fill="#00e660" font-size="13" font-weight="800" text-anchor="middle">7</text>
+                <circle cx="215" cy="30" r="5" fill="#00e660"/>
+                <!-- hop arcs -->
+                <path d="M215,27 Q230,10 244,27" fill="none" stroke="#ff8800" stroke-width="3" class="hop h1"/>
+                <text x="244" y="47" fill="#ff8800" font-size="12" font-weight="700" text-anchor="middle">8</text>
+                <path d="M244,27 Q258,10 273,27" fill="none" stroke="#ff8800" stroke-width="3" class="hop h2"/>
+                <text x="273" y="47" fill="#ff8800" font-size="12" font-weight="700" text-anchor="middle">9</text>
+                <path d="M273,27 Q288,10 303,27" fill="none" stroke="#ff8800" stroke-width="3" class="hop h3"/>
+                <text x="303" y="47" fill="#ff8800" font-size="12" font-weight="700" text-anchor="middle">10</text>
+                <path d="M303,27 Q318,10 332,27" fill="none" stroke="#ff8800" stroke-width="3" class="hop h4"/>
+                <text x="332" y="47" fill="#ff8800" font-size="12" font-weight="700" text-anchor="middle">11</text>
+                <path d="M332,27 Q347,10 361,27" fill="none" stroke="#ff8800" stroke-width="3" class="hop h5"/>
+                <text x="361" y="47" fill="#ff8800" font-size="12" font-weight="700" text-anchor="middle">12</text>
+              </g>
+            </svg>
           </div>
-          <div class="hint-label">Start at 7, hop forward 5!</div>
+          <div class="proj label">start at 7, hop 5!</div>
         </div>
       </div>
 
-      <div class="problem" data-hint="math-add-3">
-        <div class="problem-content">
-          <span class="problem-num">3.</span>
-          <span class="problem-text">4 + 4 = <span class="blank">___</span></span>
-        </div>
-        <div class="hint-area">
-          <div class="hint-fingers">
-            <div class="hand">
-              <span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span>
-            </div>
-            <span class="hint-plus">+</span>
-            <div class="hand">
-              <span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span>
-            </div>
+      <div class="row" data-problem="3">
+        <div class="printed">3.&ensp;4 + 4 = ______</div>
+        <div class="whitespace hint-3-math">
+          <div class="proj finger-row">
+            <span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span>
+            <span class="plus">+</span>
+            <span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span>
           </div>
-          <div class="hint-label">Hold up 4 fingers on each hand!</div>
+          <div class="proj label">4 fingers + 4 fingers!</div>
         </div>
       </div>
 
-      <div class="problem" data-hint="math-sub-1">
-        <div class="problem-content">
-          <span class="problem-num">4.</span>
-          <span class="problem-text">6 − 2 = <span class="blank">___</span></span>
-        </div>
-        <div class="hint-area">
-          <div class="hint-dots">
-            <div class="dot-group">
-              <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot crossed"></span><span class="dot crossed"></span>
-            </div>
+      <div class="row" data-problem="4">
+        <div class="printed">4.&ensp;6 − 2 = ______</div>
+        <div class="whitespace hint-4-math">
+          <div class="proj dot-row">
+            <span class="dot orange"></span><span class="dot orange"></span><span class="dot orange"></span><span class="dot orange"></span><span class="dot crossed"></span><span class="dot crossed"></span>
           </div>
-          <div class="hint-label">Start with 6, cross out 2!</div>
+          <div class="proj label">start with 6, cross out 2!</div>
         </div>
       </div>
     </div>
@@ -110,71 +109,62 @@
 
   <!-- ============ READING ============ -->
   <section class="worksheet hidden" id="ws-reading">
-    <div class="worksheet-paper">
-      <h2 class="ws-title">Letter Sounds</h2>
+    <div class="page">
+      <div class="page-title">Letter Sounds</div>
+      <div class="page-subtitle">Name: ____________&nbsp;&nbsp;&nbsp;Date: ________</div>
 
-      <div class="problem" data-hint="read-1">
-        <div class="problem-content">
-          <span class="problem-num">1.</span>
-          <span class="problem-text">What sound does <strong>B</strong> make?</span>
-        </div>
-        <div class="hint-area">
-          <div class="phonics-hint">
+      <div class="row" data-problem="1">
+        <div class="printed">1.&ensp;What sound does <strong>B</strong> make? ______</div>
+        <div class="whitespace hint-1-read">
+          <div class="proj phonics-row">
             <span class="big-letter">B</span>
-            <span class="arrow-right">→</span>
-            <div class="word-pictures">
-              <div class="wp"><span class="wp-icon">🐻</span><span class="wp-word"><strong>B</strong>ear</span></div>
-              <div class="wp"><span class="wp-icon">🏀</span><span class="wp-word"><strong>B</strong>all</span></div>
-              <div class="wp"><span class="wp-icon">🍌</span><span class="wp-word"><strong>B</strong>anana</span></div>
-            </div>
+            <span class="arrow">→</span>
+            <span class="wp"><span class="icon">🐻</span> <strong>B</strong>ear</span>
+            <span class="wp"><span class="icon">🏀</span> <strong>B</strong>all</span>
+            <span class="wp"><span class="icon">🍌</span> <strong>B</strong>anana</span>
           </div>
-          <div class="hint-label">What sound do these all start with?</div>
+          <div class="proj label">what sound starts them all?</div>
         </div>
       </div>
 
-      <div class="problem" data-hint="read-2">
-        <div class="problem-content">
-          <span class="problem-num">2.</span>
-          <span class="problem-text">Circle the word: <strong>cat</strong></span>
-          <div class="sight-words">
-            <span class="sw">dog</span>
-            <span class="sw">cat</span>
-            <span class="sw">bat</span>
-            <span class="sw">car</span>
+      <div class="row" data-problem="2">
+        <div class="printed">
+          2.&ensp;Circle the word: <strong>cat</strong>
+          <div class="printed-words">
+            <span class="pw">dog</span>
+            <span class="pw">cat</span>
+            <span class="pw">bat</span>
+            <span class="pw">car</span>
           </div>
         </div>
-        <div class="hint-area">
-          <div class="phonics-breakdown">
-            <span class="phon-part c">c</span>
-            <span class="phon-sep">·</span>
-            <span class="phon-part a">a</span>
-            <span class="phon-sep">·</span>
-            <span class="phon-part t">t</span>
+        <div class="whitespace hint-2-read">
+          <div class="proj phonics-split">
+            <span class="ph c">c</span><span class="ph-dot">·</span><span class="ph a">a</span><span class="ph-dot">·</span><span class="ph t">t</span>
           </div>
-          <div class="hint-label">Sound it out: "cuh" · "aah" · "tuh"</div>
+          <div class="proj label">"cuh" · "aah" · "tuh"</div>
         </div>
       </div>
 
-      <div class="problem" data-hint="read-3">
-        <div class="problem-content">
-          <span class="problem-num">3.</span>
-          <span class="problem-text">Trace the letter: <strong>S</strong></span>
-          <div class="trace-zone">
-            <svg class="trace-letter" viewBox="0 0 120 160">
-              <text x="10" y="140" class="trace-bg">S</text>
+      <div class="row tall" data-problem="3">
+        <div class="printed">
+          3.&ensp;Trace the letter:
+          <div class="printed-letter">
+            <svg viewBox="0 0 100 130" class="letter-outline">
+              <text x="8" y="115" class="ghost-letter">S</text>
             </svg>
           </div>
         </div>
-        <div class="hint-area">
-          <div class="trace-guide">
-            <svg class="trace-letter-guide" viewBox="0 0 120 160">
-              <text x="10" y="140" class="trace-bg-hint">S</text>
-              <circle class="trace-start" cx="75" cy="35" r="8"/>
-              <path class="trace-path" d="M75,35 C95,35 100,55 80,70 C55,88 50,110 65,130 C75,140 95,135 95,130"/>
-              <polygon class="trace-arrow" points="95,130 88,122 100,125"/>
+        <div class="whitespace hint-3-read">
+          <div class="proj trace-hint">
+            <svg viewBox="0 0 100 130" class="trace-overlay">
+              <circle cx="63" cy="28" r="7" fill="#00e660" class="start-dot"/>
+              <path d="M63,28 C80,28 85,45 67,57 C44,72 40,92 54,107 C62,115 80,110 80,107"
+                    fill="none" stroke="#00cfff" stroke-width="5" stroke-linecap="round"
+                    class="trace-path"/>
+              <polygon points="80,107 74,99 84,102" fill="#ff2fa8" class="trace-arrow"/>
             </svg>
           </div>
-          <div class="hint-label">Start at the green dot, follow the arrow!</div>
+          <div class="proj label">green dot → follow the arrow!</div>
         </div>
       </div>
     </div>
@@ -182,95 +172,91 @@
 
   <!-- ============ SHAPES ============ -->
   <section class="worksheet hidden" id="ws-shapes">
-    <div class="worksheet-paper">
-      <h2 class="ws-title">Shapes &amp; Patterns</h2>
+    <div class="page">
+      <div class="page-title">Shapes &amp; Patterns</div>
+      <div class="page-subtitle">Name: ____________&nbsp;&nbsp;&nbsp;Date: ________</div>
 
-      <div class="problem" data-hint="shape-1">
-        <div class="problem-content">
-          <span class="problem-num">1.</span>
-          <span class="problem-text">How many sides?</span>
-          <div class="shape-display">
-            <svg viewBox="0 0 100 100" class="shape-svg">
-              <polygon points="50,10 90,90 10,90" class="shape-outline"/>
+      <div class="row tall" data-problem="1">
+        <div class="printed">
+          1.&ensp;How many sides? ______
+          <div class="printed-shape">
+            <svg viewBox="0 0 100 95" class="shape-q">
+              <polygon points="50,5 95,85 5,85" fill="none" stroke="#999" stroke-width="2.5"/>
             </svg>
           </div>
-          <span class="problem-text"><span class="blank">___</span> sides</span>
         </div>
-        <div class="hint-area">
-          <div class="shape-counting">
-            <svg viewBox="0 0 120 115" class="shape-svg-large">
-              <polygon points="55,10 100,90 10,90" class="shape-outline-faded"/>
-              <line x1="55" y1="10" x2="100" y2="90" class="side-highlight s1"/>
-              <line x1="100" y1="90" x2="10" y2="90" class="side-highlight s2"/>
-              <line x1="10" y1="90" x2="55" y2="10" class="side-highlight s3"/>
-              <text x="85" y="50" class="side-num sn1">1</text>
-              <text x="55" y="108" class="side-num sn2">2</text>
-              <text x="20" y="50" class="side-num sn3">3</text>
+        <div class="whitespace hint-1-shape">
+          <div class="proj shape-count-hint">
+            <svg viewBox="0 0 120 110" class="shape-hint-svg">
+              <line x1="55" y1="8" x2="100" y2="85" stroke="#ff8800" stroke-width="5" stroke-linecap="round" class="side s1"/>
+              <line x1="100" y1="85" x2="10" y2="85" stroke="#00cfff" stroke-width="5" stroke-linecap="round" class="side s2"/>
+              <line x1="10" y1="85" x2="55" y2="8" stroke="#00e660" stroke-width="5" stroke-linecap="round" class="side s3"/>
+              <text x="86" y="48" fill="#ff8800" font-size="20" font-weight="800" class="snum sn1">1</text>
+              <text x="52" y="103" fill="#00cfff" font-size="20" font-weight="800" text-anchor="middle" class="snum sn2">2</text>
+              <text x="20" y="48" fill="#00e660" font-size="20" font-weight="800" class="snum sn3">3</text>
             </svg>
           </div>
-          <div class="hint-label">Count each side: 1... 2... 3!</div>
+          <div class="proj label">count each colored side!</div>
         </div>
       </div>
 
-      <div class="problem" data-hint="shape-2">
-        <div class="problem-content">
-          <span class="problem-num">2.</span>
-          <span class="problem-text">What comes next?</span>
-          <div class="pattern-row">
-            <span class="pat-item circle-pat"></span>
-            <span class="pat-item square-pat"></span>
-            <span class="pat-item circle-pat"></span>
-            <span class="pat-item square-pat"></span>
-            <span class="pat-item mystery">?</span>
+      <div class="row" data-problem="2">
+        <div class="printed">
+          2.&ensp;What comes next?
+          <div class="printed-pattern">
+            <span class="pp circle-pp"></span>
+            <span class="pp square-pp"></span>
+            <span class="pp circle-pp"></span>
+            <span class="pp square-pp"></span>
+            <span class="pp blank-pp">?</span>
           </div>
         </div>
-        <div class="hint-area">
-          <div class="pattern-hint-content">
-            <div class="pattern-row">
-              <span class="pat-item circle-pat hl"></span>
-              <span class="pat-item square-pat"></span>
-              <span class="pat-item circle-pat hl"></span>
-              <span class="pat-item square-pat"></span>
-              <span class="pat-item mystery pulse">?</span>
-            </div>
-            <svg viewBox="0 0 200 28" class="bracket-svg">
-              <path d="M18,4 L18,18 L82,18 L82,4" class="bracket-line"/>
-              <text x="50" y="14" class="bracket-text">repeats!</text>
+        <div class="whitespace hint-2-shape">
+          <div class="proj pattern-hint">
+            <svg viewBox="0 0 240 40" class="bracket-hint">
+              <!-- highlight circles -->
+              <circle cx="22" cy="10" r="14" fill="none" stroke="#00e660" stroke-width="3"/>
+              <circle cx="102" cy="10" r="14" fill="none" stroke="#00e660" stroke-width="3"/>
+              <!-- bracket underneath -->
+              <path d="M8,28 L8,36 L56,36 L56,28" fill="none" stroke="#00e660" stroke-width="2.5"/>
+              <text x="32" y="34" fill="#00e660" font-size="8" font-weight="700" text-anchor="middle">repeats</text>
+              <!-- arrow to mystery -->
+              <line x1="120" y1="20" x2="170" y2="20" stroke="#ff8800" stroke-width="2.5" stroke-dasharray="6,4"/>
+              <polygon points="170,20 163,15 163,25" fill="#ff8800"/>
+              <circle cx="195" cy="10" r="14" fill="none" stroke="#ff2fa8" stroke-width="3" stroke-dasharray="5,3" class="mystery-ring"/>
             </svg>
           </div>
-          <div class="hint-label">Circle, square, circle, square... what repeats?</div>
+          <div class="proj label">the green ones are the same — what's the pattern?</div>
         </div>
       </div>
 
-      <div class="problem" data-hint="shape-3">
-        <div class="problem-content">
-          <span class="problem-num">3.</span>
-          <span class="problem-text">Match the shape to its name</span>
-          <div class="match-grid">
-            <div class="match-left">
-              <svg viewBox="0 0 60 60" class="match-shape"><rect x="10" y="10" width="40" height="40" class="shape-outline"/></svg>
-              <svg viewBox="0 0 60 60" class="match-shape"><circle cx="30" cy="30" r="22" class="shape-outline"/></svg>
+      <div class="row" data-problem="3">
+        <div class="printed">
+          3.&ensp;Match the shape to its name
+          <div class="printed-match">
+            <div class="pm-left">
+              <svg viewBox="0 0 50 50"><rect x="8" y="8" width="34" height="34" fill="none" stroke="#999" stroke-width="2.5"/></svg>
+              <svg viewBox="0 0 50 50"><circle cx="25" cy="25" r="18" fill="none" stroke="#999" stroke-width="2.5"/></svg>
             </div>
-            <div class="match-right">
-              <span class="match-word">Circle</span>
-              <span class="match-word">Square</span>
+            <div class="pm-right">
+              <span>Circle</span>
+              <span>Square</span>
             </div>
           </div>
         </div>
-        <div class="hint-area">
-          <div class="match-hint">
-            <div class="match-clue">
-              <svg viewBox="0 0 60 60" class="match-shape"><rect x="10" y="10" width="40" height="40" class="shape-glow-cyan"/></svg>
-              <span class="match-arrow">→</span>
-              <span class="match-desc">4 equal sides</span>
+        <div class="whitespace hint-3-shape">
+          <div class="proj match-hint">
+            <div class="mh-row">
+              <svg viewBox="0 0 50 50" class="mh-shape"><rect x="8" y="8" width="34" height="34" fill="none" stroke="#00cfff" stroke-width="4"/></svg>
+              <span class="mh-arrow">→</span>
+              <span class="mh-desc">4 sides, 4 corners</span>
             </div>
-            <div class="match-clue">
-              <svg viewBox="0 0 60 60" class="match-shape"><circle cx="30" cy="30" r="22" class="shape-glow-green"/></svg>
-              <span class="match-arrow">→</span>
-              <span class="match-desc">Round, no corners</span>
+            <div class="mh-row">
+              <svg viewBox="0 0 50 50" class="mh-shape"><circle cx="25" cy="25" r="18" fill="none" stroke="#00e660" stroke-width="4"/></svg>
+              <span class="mh-arrow">→</span>
+              <span class="mh-desc">round, no corners</span>
             </div>
           </div>
-          <div class="hint-label">Look at the sides and corners!</div>
         </div>
       </div>
     </div>
@@ -279,7 +265,7 @@
 
 <footer>
   <p>Hugo Projection UI Demo — <a href="https://github.com/phdev/Hugo">GitHub</a></p>
-  <p class="phase">Phase 0 — colors tuned for Kodak Luma pico projector (~150 lm)</p>
+  <p class="phase">Colors tuned for Kodak Luma pico projector (~150 lm)</p>
 </footer>
 
 <script src="app.js"></script>
