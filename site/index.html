@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hugo — Projection UI Demo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Hugo</h1>
+  <p class="subtitle">Homework Helping Projector Box — Projection UI Demo</p>
+  <p class="desc">This is what gets projected onto a kid's worksheet. Click any problem to see the hint animation.</p>
+</header>
+
+<main>
+  <nav class="demo-tabs">
+    <button class="tab active" data-tab="math">Math Worksheet</button>
+    <button class="tab" data-tab="reading">Reading Worksheet</button>
+    <button class="tab" data-tab="shapes">Shapes Worksheet</button>
+  </nav>
+
+  <!-- Math worksheet -->
+  <section class="worksheet" id="ws-math">
+    <div class="worksheet-paper">
+      <h2 class="ws-title">Addition Practice</h2>
+
+      <div class="problem" data-hint="math-add-1">
+        <span class="problem-num">1.</span>
+        <span class="problem-text">3 + 2 = ___</span>
+        <div class="answer-blank"></div>
+      </div>
+      <div class="hint-zone" id="hint-math-add-1">
+        <div class="hint-dots">
+          <div class="dot-group left">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <span class="hint-plus">+</span>
+          <div class="dot-group right">
+            <span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+        <div class="hint-label">Count all the dots!</div>
+      </div>
+
+      <div class="problem" data-hint="math-add-2">
+        <span class="problem-num">2.</span>
+        <span class="problem-text">7 + 5 = ___</span>
+        <div class="answer-blank"></div>
+      </div>
+      <div class="hint-zone" id="hint-math-add-2">
+        <div class="number-line">
+          <div class="nl-track">
+            <span class="nl-mark" style="--pos:0">0</span>
+            <span class="nl-mark" style="--pos:1">1</span>
+            <span class="nl-mark" style="--pos:2">2</span>
+            <span class="nl-mark" style="--pos:3">3</span>
+            <span class="nl-mark" style="--pos:4">4</span>
+            <span class="nl-mark" style="--pos:5">5</span>
+            <span class="nl-mark" style="--pos:6">6</span>
+            <span class="nl-mark" style="--pos:7">7</span>
+            <span class="nl-mark" style="--pos:8">8</span>
+            <span class="nl-mark" style="--pos:9">9</span>
+            <span class="nl-mark" style="--pos:10">10</span>
+            <span class="nl-mark" style="--pos:11">11</span>
+            <span class="nl-mark" style="--pos:12">12</span>
+          </div>
+          <div class="nl-arrow start" style="--from:7; --to:8"></div>
+          <div class="nl-hops">
+            <span class="hop" style="--h:0">↱</span>
+            <span class="hop" style="--h:1">↱</span>
+            <span class="hop" style="--h:2">↱</span>
+            <span class="hop" style="--h:3">↱</span>
+            <span class="hop" style="--h:4">↱</span>
+          </div>
+          <div class="nl-start-marker">Start at 7</div>
+        </div>
+        <div class="hint-label">Start at 7, hop forward 5 times!</div>
+      </div>
+
+      <div class="problem" data-hint="math-add-3">
+        <span class="problem-num">3.</span>
+        <span class="problem-text">4 + 4 = ___</span>
+        <div class="answer-blank"></div>
+      </div>
+      <div class="hint-zone" id="hint-math-add-3">
+        <div class="hint-fingers">
+          <div class="hand">
+            <span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span>
+          </div>
+          <span class="hint-plus">+</span>
+          <div class="hand">
+            <span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span><span class="finger">☝</span>
+          </div>
+        </div>
+        <div class="hint-label">Hold up 4 fingers on each hand!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reading worksheet -->
+  <section class="worksheet hidden" id="ws-reading">
+    <div class="worksheet-paper">
+      <h2 class="ws-title">Letter Sounds</h2>
+
+      <div class="problem" data-hint="read-1">
+        <span class="problem-num">1.</span>
+        <span class="problem-text">What sound does <strong>B</strong> make?</span>
+        <div class="answer-blank"></div>
+      </div>
+      <div class="hint-zone" id="hint-read-1">
+        <div class="phonics-hint">
+          <span class="big-letter">B</span>
+          <span class="arrow-right">→</span>
+          <div class="word-pictures">
+            <div class="wp"><span class="wp-icon">🐻</span><span class="wp-word"><strong>B</strong>ear</span></div>
+            <div class="wp"><span class="wp-icon">🏀</span><span class="wp-word"><strong>B</strong>all</span></div>
+            <div class="wp"><span class="wp-icon">🍌</span><span class="wp-word"><strong>B</strong>anana</span></div>
+          </div>
+        </div>
+        <div class="hint-label">What sound do these all start with?</div>
+      </div>
+
+      <div class="problem" data-hint="read-2">
+        <span class="problem-num">2.</span>
+        <span class="problem-text">Circle the word: <strong>cat</strong></span>
+        <div class="sight-words">
+          <span class="sw" data-correct="false">dog</span>
+          <span class="sw" data-correct="true">cat</span>
+          <span class="sw" data-correct="false">bat</span>
+          <span class="sw" data-correct="false">car</span>
+        </div>
+      </div>
+      <div class="hint-zone" id="hint-read-2">
+        <div class="phonics-breakdown">
+          <span class="phon-part c">c</span>
+          <span class="phon-sep">·</span>
+          <span class="phon-part a">a</span>
+          <span class="phon-sep">·</span>
+          <span class="phon-part t">t</span>
+        </div>
+        <div class="hint-label">Sound it out: "cuh" · "aah" · "tuh" — which word matches?</div>
+      </div>
+
+      <div class="problem" data-hint="read-3">
+        <span class="problem-num">3.</span>
+        <span class="problem-text">Trace the letter: <strong>S</strong></span>
+        <div class="trace-zone">
+          <svg class="trace-letter" viewBox="0 0 120 160">
+            <text x="10" y="140" class="trace-bg">S</text>
+          </svg>
+        </div>
+      </div>
+      <div class="hint-zone" id="hint-read-3">
+        <div class="trace-guide">
+          <svg class="trace-letter" viewBox="0 0 120 160">
+            <text x="10" y="140" class="trace-bg">S</text>
+            <circle class="trace-start" cx="75" cy="35" r="8"/>
+            <path class="trace-path" d="M75,35 C95,35 100,55 80,70 C55,88 50,110 65,130 C75,140 95,135 95,130" />
+            <polygon class="trace-arrow" points="95,130 88,122 100,125"/>
+          </svg>
+        </div>
+        <div class="hint-label">Start at the green dot, follow the arrow!</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shapes worksheet -->
+  <section class="worksheet hidden" id="ws-shapes">
+    <div class="worksheet-paper">
+      <h2 class="ws-title">Shapes &amp; Patterns</h2>
+
+      <div class="problem" data-hint="shape-1">
+        <span class="problem-num">1.</span>
+        <span class="problem-text">How many sides does this shape have?</span>
+        <div class="shape-display">
+          <svg viewBox="0 0 100 100" class="shape-svg">
+            <polygon points="50,10 90,90 10,90" class="shape-outline"/>
+          </svg>
+        </div>
+        <div class="answer-blank"></div>
+      </div>
+      <div class="hint-zone" id="hint-shape-1">
+        <div class="shape-counting">
+          <svg viewBox="0 0 100 100" class="shape-svg">
+            <polygon points="50,10 90,90 10,90" class="shape-outline"/>
+            <line x1="50" y1="10" x2="90" y2="90" class="side-highlight s1"/>
+            <line x1="90" y1="90" x2="10" y2="90" class="side-highlight s2"/>
+            <line x1="10" y1="90" x2="50" y2="10" class="side-highlight s3"/>
+            <text x="78" y="50" class="side-num sn1">1</text>
+            <text x="50" y="105" class="side-num sn2">2</text>
+            <text x="18" y="50" class="side-num sn3">3</text>
+          </svg>
+        </div>
+        <div class="hint-label">Touch each side and count: 1... 2... 3...!</div>
+      </div>
+
+      <div class="problem" data-hint="shape-2">
+        <span class="problem-num">2.</span>
+        <span class="problem-text">What comes next?</span>
+        <div class="pattern-row">
+          <span class="pat-item circle-pat"></span>
+          <span class="pat-item square-pat"></span>
+          <span class="pat-item circle-pat"></span>
+          <span class="pat-item square-pat"></span>
+          <span class="pat-item mystery">?</span>
+        </div>
+      </div>
+      <div class="hint-zone" id="hint-shape-2">
+        <div class="pattern-hint">
+          <div class="pattern-row">
+            <span class="pat-item circle-pat highlighted"></span>
+            <span class="pat-item square-pat"></span>
+            <span class="pat-item circle-pat highlighted"></span>
+            <span class="pat-item square-pat"></span>
+            <span class="pat-item mystery pulse">?</span>
+          </div>
+          <div class="pattern-bracket">
+            <span class="bracket-label">This part repeats!</span>
+          </div>
+        </div>
+        <div class="hint-label">Look — circle, square, circle, square... what's the pattern?</div>
+      </div>
+
+      <div class="problem" data-hint="shape-3">
+        <span class="problem-num">3.</span>
+        <span class="problem-text">Match the shape to its name</span>
+        <div class="match-grid">
+          <div class="match-left">
+            <svg viewBox="0 0 60 60" class="match-shape"><rect x="10" y="10" width="40" height="40" class="shape-outline"/></svg>
+            <svg viewBox="0 0 60 60" class="match-shape"><circle cx="30" cy="30" r="22" class="shape-outline"/></svg>
+          </div>
+          <div class="match-right">
+            <span class="match-word">Circle</span>
+            <span class="match-word">Square</span>
+          </div>
+        </div>
+      </div>
+      <div class="hint-zone" id="hint-shape-3">
+        <div class="match-hint">
+          <div class="match-clue">
+            <svg viewBox="0 0 60 60" class="match-shape"><rect x="10" y="10" width="40" height="40" class="shape-outline glow-blue"/></svg>
+            <span class="match-desc">4 equal sides, 4 corners</span>
+          </div>
+          <div class="match-clue">
+            <svg viewBox="0 0 60 60" class="match-shape"><circle cx="30" cy="30" r="22" class="shape-outline glow-green"/></svg>
+            <span class="match-desc">Round, no corners</span>
+          </div>
+        </div>
+        <div class="hint-label">Look at the sides and corners!</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Hugo Projection UI Demo — <a href="https://github.com/phdev/Hugo">GitHub</a></p>
+  <p class="phase">Phase 0: Interactive mockup of projected overlays</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
