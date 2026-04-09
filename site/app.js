@@ -14,24 +14,35 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// ── Help button press-and-hold interaction ──
-const DWELL_MS = 800; // must hold for this long to trigger
+// ── Help button interaction ──
+// Short tap: toggle hint immediately.
+// Long press (800ms): expanding animation then trigger.
+// This mirrors the real device where the camera detects a
+// sustained finger press, but on the web a tap also works.
+const DWELL_MS = 800;
 
 document.querySelectorAll('.help-btn').forEach(btn => {
   let pressStart = null;
   let animFrame = null;
+  let triggered = false;
   const block = btn.closest('.problem-block');
+
+  function activate() {
+    // Close other hints on this page
+    block.closest('.paper')
+      .querySelectorAll('.problem-block.active')
+      .forEach(b => b.classList.remove('active'));
+    block.classList.add('active');
+  }
+
+  function deactivate() {
+    block.classList.remove('active');
+  }
 
   function startPress(e) {
     e.preventDefault();
     e.stopPropagation();
-
-    // If already active, dismiss on tap
-    if (block.classList.contains('active')) {
-      block.classList.remove('active');
-      return;
-    }
-
+    triggered = false;
     pressStart = performance.now();
     btn.classList.add('pressing');
     animate();
@@ -44,23 +55,19 @@ document.querySelectorAll('.help-btn').forEach(btn => {
     btn.style.setProperty('--press', progress.toFixed(3));
 
     if (progress >= 1) {
-      // Triggered!
-      trigger();
+      triggered = true;
+      cleanupPress();
+      if (block.classList.contains('active')) {
+        deactivate();
+      } else {
+        activate();
+      }
       return;
     }
     animFrame = requestAnimationFrame(animate);
   }
 
-  function trigger() {
-    cancelPress();
-    // Close other hints on this page
-    block.closest('.paper')
-      .querySelectorAll('.problem-block.active')
-      .forEach(b => b.classList.remove('active'));
-    block.classList.add('active');
-  }
-
-  function cancelPress() {
+  function cleanupPress() {
     pressStart = null;
     if (animFrame) cancelAnimationFrame(animFrame);
     animFrame = null;
@@ -68,13 +75,27 @@ document.querySelectorAll('.help-btn').forEach(btn => {
     btn.style.setProperty('--press', '0');
   }
 
-  // Mouse events
-  btn.addEventListener('mousedown', startPress);
-  btn.addEventListener('mouseup', cancelPress);
-  btn.addEventListener('mouseleave', cancelPress);
+  function endPress(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    cleanupPress();
+    // If the long-press already triggered, don't double-toggle
+    if (triggered) return;
+    // Short tap — toggle immediately
+    if (block.classList.contains('active')) {
+      deactivate();
+    } else {
+      activate();
+    }
+  }
 
-  // Touch events
+  // Mouse
+  btn.addEventListener('mousedown', startPress);
+  btn.addEventListener('mouseup', endPress);
+  btn.addEventListener('mouseleave', () => cleanupPress());
+
+  // Touch
   btn.addEventListener('touchstart', startPress, { passive: false });
-  btn.addEventListener('touchend', cancelPress);
-  btn.addEventListener('touchcancel', cancelPress);
+  btn.addEventListener('touchend', endPress, { passive: false });
+  btn.addEventListener('touchcancel', () => cleanupPress());
 });
