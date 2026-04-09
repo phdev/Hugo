@@ -61,20 +61,38 @@ _RULES: list[tuple[re.Pattern, ProblemType]] = [
 ]
 
 
-def classify_problem(problem: Problem) -> ProblemType:
+def classify_problem(problem: Problem, use_llm: bool = True) -> ProblemType:
     """Classify a single worksheet problem by type.
 
-    Uses local regex pattern matching. Returns ProblemType.UNKNOWN
-    if no rule matches (would route to LLM in production).
+    Routing chain:
+    1. Local regex pattern matching (instant, no network)
+    2. Ollama / Qwen 3 4B on Mac mini (fast, local network)
+    3. Anthropic API / Claude Sonnet (reliable, cloud)
 
     Args:
         problem: A Problem with extracted text.
+        use_llm: If True, falls back to LLM when regex fails.
+                 Set False for testing or offline-only mode.
 
     Returns:
         The detected ProblemType.
     """
     text = problem.text
+
+    # 1. Regex — instant
     for pattern, ptype in _RULES:
         if pattern.search(text):
             return ptype
-    return ProblemType.UNKNOWN
+
+    if not use_llm or not text.strip():
+        return ProblemType.UNKNOWN
+
+    # 2. Ollama — local network
+    from hugo.classifier.llm import classify_with_ollama
+    result = classify_with_ollama(text)
+    if result != ProblemType.UNKNOWN:
+        return result
+
+    # 3. Anthropic — cloud fallback
+    from hugo.classifier.anthropic_fallback import classify_with_anthropic
+    return classify_with_anthropic(text)
