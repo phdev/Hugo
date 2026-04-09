@@ -351,6 +351,10 @@ body {
 .start-dot { animation: pulse 1s ease-in-out infinite; }
 .trace-line { stroke-dasharray: 220; stroke-dashoffset: 220; }
 .problem-block.active .trace-line { animation: drawStroke 1.5s ease forwards .15s; }
+.trace-line2 { stroke-dasharray: 220; stroke-dashoffset: 220; }
+.problem-block.active .trace-line2 { animation: drawStroke 1.5s ease forwards .8s; }
+.trace-cross { stroke-dasharray: 80; stroke-dashoffset: 80; }
+.problem-block.active .trace-cross { animation: drawStroke .5s ease forwards 1.8s; }
 .trace-tip { opacity: 0; }
 .problem-block.active .trace-tip { animation: fadeIn .2s ease forwards 1.6s; }
 @keyframes pulse { 0%,100% { r: 7; opacity: 1; } 50% { r: 9; opacity: .65; } }
@@ -368,10 +372,23 @@ body {
 .problem-block.active .s1 { animation: drawStroke .35s ease forwards .08s; }
 .problem-block.active .s2 { animation: drawStroke .35s ease forwards .35s; }
 .problem-block.active .s3 { animation: drawStroke .35s ease forwards .62s; }
+.problem-block.active .s4 { animation: drawStroke .35s ease forwards .89s; }
 .sn { opacity: 0; }
 .problem-block.active .sn1 { animation: popIn .2s ease forwards .3s; }
 .problem-block.active .sn2 { animation: popIn .2s ease forwards .55s; }
 .problem-block.active .sn3 { animation: popIn .2s ease forwards .82s; }
+.problem-block.active .sn4 { animation: popIn .2s ease forwards 1.09s; }
+
+/* Corners */
+.corner { opacity: 0; }
+.problem-block.active .c1 { animation: popIn .25s ease forwards .1s; }
+.problem-block.active .c2 { animation: popIn .25s ease forwards .35s; }
+.problem-block.active .c3 { animation: popIn .25s ease forwards .6s; }
+.problem-block.active .c4 { animation: popIn .25s ease forwards .85s; }
+
+/* Identify shapes */
+.identify-svg { width: 100%; max-width: 220px; height: auto; }
+.mixed-shapes svg { width: 100%; max-width: 220px; height: auto; }
 
 /* Patterns */
 .pattern-printed {
@@ -381,6 +398,12 @@ body {
 .pp { width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; }
 .circ { background: #999; border-radius: 50%; }
 .sq { background: #999; border-radius: 3px; }
+.tri {
+  width: 0; height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 24px solid #999;
+}
 .blank-pp {
   border: 2px dashed #aaa; border-radius: 6px;
   color: #999; font-weight: 700; font-size: .9rem;
@@ -389,6 +412,7 @@ body {
 
 .pattern-proj { }
 .bracket-svg { width: 220px; height: 42px; }
+.bracket-svg.wide-bracket { width: 260px; }
 .mystery-ring { animation: ringPulse 1s ease-in-out infinite; }
 @keyframes ringPulse { 0%,100% { stroke-width: 3; } 50% { stroke-width: 5; } }
 
