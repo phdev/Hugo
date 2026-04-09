@@ -12,6 +12,7 @@ answers) → projector displays visual help aligned to the physical page.
 - **Raspberry Pi 5** — compute
 - **Pi Camera Module** — captures worksheets
 - **Kodak Luma 150 projector** — HDMI-CEC via `cec-client`
+- **VL53L7CX ToF sensor** — 8x8 zone ranging, 60°x60° FOV, finger detection
 - **Actuonix L12-50 linear servo + 2x MG90S servos** — lift/pan/tilt
 - **Mac mini M4 16GB** — remote LLM brain (Qwen 3 8B via Ollama)
 - **Anthropic API** (Sonnet/Opus) — complex fallback

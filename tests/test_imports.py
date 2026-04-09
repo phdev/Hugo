@@ -88,6 +88,92 @@ def test_import_interaction_dwell():
     assert hasattr(dwell, "DWELL_MS")
 
 
+def test_import_interaction_touch_fusion():
+    from hugo.interaction import touch_fusion
+    assert hasattr(touch_fusion, "fuse_detections")
+
+
+def test_import_hardware_tof():
+    from hugo.hardware import tof_sensor
+    assert hasattr(tof_sensor, "ZoneGrid")
+    assert hasattr(tof_sensor, "TouchZone")
+    assert hasattr(tof_sensor, "init")
+    assert hasattr(tof_sensor, "read_grid")
+    assert hasattr(tof_sensor, "detect_touch_zones")
+    assert hasattr(tof_sensor, "zone_to_worksheet_xy")
+    assert hasattr(tof_sensor, "calibrate_baseline")
+
+
+def test_tof_zone_grid():
+    """Test ZoneGrid validity checking and masking."""
+    import numpy as np
+    from hugo.hardware.tof_sensor import ZoneGrid
+
+    distances = np.full((8, 8), 400, dtype=np.int16)
+    statuses = np.full((8, 8), 5, dtype=np.uint8)  # all valid
+    statuses[0, 0] = 0  # invalid zone
+
+    grid = ZoneGrid(distances=distances, statuses=statuses)
+    assert grid.is_valid(1, 1) is True
+    assert grid.is_valid(0, 0) is False
+
+    valid = grid.valid_distances()
+    assert valid[0, 0] == 0      # masked out
+    assert valid[1, 1] == 400    # kept
+
+
+def test_tof_detect_touch_zones():
+    """Test finger detection against a baseline."""
+    import numpy as np
+    from hugo.hardware.tof_sensor import ZoneGrid, detect_touch_zones
+
+    baseline = np.full((8, 8), 400, dtype=np.int16)  # table at 400mm
+
+    # Current frame: one zone much closer (finger)
+    distances = np.full((8, 8), 400, dtype=np.int16)
+    distances[3, 4] = 350  # finger 50mm closer
+    statuses = np.full((8, 8), 5, dtype=np.uint8)
+
+    grid = ZoneGrid(distances=distances, statuses=statuses)
+    touches = detect_touch_zones(grid, baseline, threshold_mm=40)
+
+    assert len(touches) == 1
+    assert touches[0].row == 3
+    assert touches[0].col == 4
+    assert touches[0].delta_mm == 50
+
+
+def test_tof_no_touch():
+    """No touch when distances match baseline."""
+    import numpy as np
+    from hugo.hardware.tof_sensor import ZoneGrid, detect_touch_zones
+
+    baseline = np.full((8, 8), 400, dtype=np.int16)
+    distances = np.full((8, 8), 395, dtype=np.int16)  # 5mm noise
+    statuses = np.full((8, 8), 5, dtype=np.uint8)
+
+    grid = ZoneGrid(distances=distances, statuses=statuses)
+    touches = detect_touch_zones(grid, baseline, threshold_mm=40)
+    assert len(touches) == 0
+
+
+def test_tof_zone_to_worksheet_xy():
+    """Test zone-to-pixel coordinate mapping."""
+    from hugo.hardware.tof_sensor import zone_to_worksheet_xy
+
+    # Center of zone (0,0) in an 8x8 grid on a 640x828 worksheet
+    x, y = zone_to_worksheet_xy(0, 0, resolution=8,
+                                worksheet_width=640, worksheet_height=828)
+    assert x == 40   # 640/8/2
+    assert y == 51    # 828/8/2 ≈ 51
+
+    # Last zone (7,7)
+    x, y = zone_to_worksheet_xy(7, 7, resolution=8,
+                                worksheet_width=640, worksheet_height=828)
+    assert x == 600   # 7 * 80 + 40
+    assert y == 776    # 7 * 103.5 + 51
+
+
 def test_help_button_creation():
     """Test that help buttons are created from problem bounding boxes."""
     from hugo.layout.analyze import Problem

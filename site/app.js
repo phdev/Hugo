@@ -1,3 +1,8 @@
+// ── Sensor FOV toggle ──
+document.getElementById('fov-check').addEventListener('change', (e) => {
+  document.getElementById('fov-overlay').classList.toggle('visible', e.target.checked);
+});
+
 // ── Tab switching ──
 document.querySelectorAll('.tab').forEach(tab => {
   tab.addEventListener('click', () => {

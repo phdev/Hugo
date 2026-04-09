@@ -16,9 +16,23 @@
     <button class="tab" data-tab="shapes">Shapes</button>
   </nav>
   <span class="hint-text">press &amp; hold a <span style="color:var(--proj-cyan)">?</span> button</span>
+  <label class="fov-toggle"><input type="checkbox" id="fov-check"> Show sensor FOV</label>
 </div>
 
 <div class="table-surface">
+
+  <!-- Sensor field-of-view overlays -->
+  <div class="fov-overlay" id="fov-overlay">
+    <div class="fov-camera">
+      <span class="fov-label">📷 Pi Camera</span>
+    </div>
+    <div class="fov-tof">
+      <div class="tof-grid">
+        <!-- 8x8 zone grid lines rendered by CSS -->
+      </div>
+      <span class="fov-label fov-label-tof">ToF VL53L7CX<br>8×8 zones</span>
+    </div>
+  </div>
 
   <!-- ============ MATH ============ -->
   <div class="paper" id="ws-math">

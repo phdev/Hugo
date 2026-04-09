@@ -49,11 +49,20 @@ body {
 .tab.active { background: #444; color: #fff; border-color: #777; }
 .hint-text { color: #666; font-style: italic; }
 
+/* FOV toggle */
+.fov-toggle {
+  display: flex; align-items: center; gap: .3rem;
+  color: #666; font-size: .65rem; cursor: pointer;
+  user-select: none;
+}
+.fov-toggle input { cursor: pointer; }
+
 /* ══════════════════════════════════════
    TABLE SURFACE — the desk the paper sits on
    ══════════════════════════════════════ */
 .table-surface {
   flex: 1;
+  position: relative;
   background:
     /* subtle wood grain */
     repeating-linear-gradient(
@@ -500,6 +509,86 @@ body {
 .mp-svg { width: 28px; height: 28px; }
 .mp-arr { color: var(--proj-yellow); font-weight: 700; filter: drop-shadow(0 0 3px rgba(255,230,0,.4)); }
 .mp-desc { font-size: .75rem; font-weight: 700; color: var(--proj-cyan); filter: drop-shadow(0 0 3px rgba(0,207,255,.3)); }
+
+/* ══════════════════════════════════════
+   SENSOR FOV OVERLAYS
+   ══════════════════════════════════════ */
+.fov-overlay {
+  display: none;       /* toggled by JS */
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+.fov-overlay.visible { display: block; }
+
+/* Camera FOV — larger rectangle covering the full page area */
+.fov-camera {
+  position: absolute;
+  /* Positioned to match the paper area + some margin */
+  top: 4px; bottom: 4px;
+  left: 50%;
+  width: calc(100% - 16px);
+  max-width: 510px;
+  transform: translateX(-50%);
+  border: 2.5px solid rgba(0, 207, 255, .6);
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgba(0, 207, 255, .15);
+}
+
+/* ToF FOV — smaller square, 60°x60° covers the worksheet area */
+.fov-tof {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(85%, 420px);
+  aspect-ratio: 1 / 1.294; /* 8.5:11 ratio */
+  max-height: 80%;
+  transform: translate(-50%, -50%);
+  border: 2.5px dashed rgba(0, 230, 96, .6);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(0, 230, 96, .1);
+}
+
+/* 8x8 grid inside the ToF area */
+.tof-grid {
+  position: absolute;
+  inset: 0;
+  /* Horizontal grid lines */
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(12.5% - 0.5px),
+      rgba(0, 230, 96, .18) calc(12.5% - 0.5px),
+      rgba(0, 230, 96, .18) 12.5%
+    ),
+    repeating-linear-gradient(
+      to right,
+      transparent,
+      transparent calc(12.5% - 0.5px),
+      rgba(0, 230, 96, .18) calc(12.5% - 0.5px),
+      rgba(0, 230, 96, .18) 12.5%
+    );
+}
+
+/* Labels */
+.fov-label {
+  position: absolute;
+  top: -18px; left: 8px;
+  font-family: system-ui, sans-serif;
+  font-size: .6rem;
+  font-weight: 700;
+  color: rgba(0, 207, 255, .8);
+  white-space: nowrap;
+}
+.fov-label-tof {
+  color: rgba(0, 230, 96, .8);
+  top: auto; bottom: -26px;
+  left: auto; right: 8px;
+  text-align: right;
+  line-height: 1.2;
+}
 
 /* ── Responsive ── */
 @media (max-width: 500px) {
