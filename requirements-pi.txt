@@ -1,0 +1,11 @@
+# Pi 5 specific dependencies
+# Install: pip install -r requirements-pi.txt
+picamera2
+sparkfun-qwiic-vl53l5cx
+pyaudio
+pygame
+openwakeword
+numpy
+httpx
+requests
+Pillow
